@@ -1,16 +1,16 @@
+const axios = require('axios')
+
 module.exports = class baseRoutes {
    constructor() {
       this.serverURL = 'http://35.169.224.183:3105/';
       this.sessionAttributes = {};
 
       this.buildResponse = require('./../buildResponse');
-      this.rp = require('request-promise');
    }
 
    checkSuggestion(intent, userID) {
       return new Promise((res, rej) => {
-         // console.log(intent, userID, this.serverURL + 'last/user/' + userID)
-         this.rp(this.serverURL + 'sales/last/user/' + userID)
+         axios.get(this.serverURL + 'sales/last/user/' + userID)
             .then(data => res(data))
             .catch(data => res(data))
       })
@@ -20,16 +20,13 @@ module.exports = class baseRoutes {
    parseRoute(intent, userID, callback) {
       const intentName = intent.name;
       let response = this.changeView(intent, userID, intentName, callback)
-
-      if (intent.slots.suggestion.value == 'yes') {
+      if (intent.slots.suggestion && intent.slots.suggestion.value == 'yes') {
          this.checkSuggestion(intent, userID)
             .then(resp => {
                delete intent.slots.view
                delete intent.slots.suggestion
-               console.log(resp)
                let route = this.buildQueryString(intent.slots)
                let sessionQuery = 'userID' + '=' + userID
-               // this.sendRequest(route, sessionQuery, intentName, callback)
                this.sendBackReturnedData(intentName, resp.data[0], callback)
             })
       }
@@ -40,6 +37,7 @@ module.exports = class baseRoutes {
          delete intent.slots.suggestion
          let route = this.buildQueryString(intent.slots)
          let sessionQuery = 'userID' + '=' + userID
+
          this.sendRequest(route, sessionQuery, intentName, callback)
       }
    }
@@ -74,7 +72,7 @@ module.exports = class baseRoutes {
    }
 
    sendBackReturnedData(intentName, response, callback) {
-      response = JSON.parse(response);
+      response = JSON.parse(JSON.stringify(response.data));
       let speechOutput = response.speechlet
       let repromptText = "Oh noes, Something went wrong, please try again.";
       callback(this.sessionAttributes, this.buildResponse(intentName, speechOutput, repromptText, false));
@@ -83,17 +81,17 @@ module.exports = class baseRoutes {
    changeView(intents, userID, intentName, callback) {
       if (intents.slots.view.value == 'map') {
          let query = this.pullMapViewParams(intents, userID)
-         this.rp(this.serverURL + query)
+         axios.get(this.serverURL + query)
             .then(resp => {
                query = query.replace('mapView', 'map')
-               this.rp(this.serverURL + query + `&group=${intents.slots.group.value}`)
+               axios.get(this.serverURL + query + `&group=${intents.slots.group.value}`)
                   .then(resp => {
                      this.sendBackReturnedData(intentName, resp, callback)
                   })
             });
       } else
-         this.rp(this.serverURL + 'sales/home')
-            .then(resp => console.log(resp));
+         axios.get(this.serverURL + 'sales/home')
+            .then(resp => console.log(resp.data));
    }
 
    pullMapViewParams(intents, userID) {
@@ -107,7 +105,7 @@ module.exports = class baseRoutes {
    }
 
    sendRequest(route, sessionQuery, intentName, callback) {
-      this.rp(this.serverURL + route.toLowerCase() + sessionQuery)
+      axios.get(this.serverURL + route.toLowerCase() + sessionQuery)
          .then(resp => this.sendBackReturnedData(intentName, resp, callback))
          .catch(err => {
             this.handleErr(err, callback)

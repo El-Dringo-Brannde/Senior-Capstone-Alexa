@@ -12,9 +12,6 @@ module.exports = class startStop {
 
       this.buildResponse = buildResponse;
 
-      this.serverURL = 'http://35.169.224.183:3105/';
-
-      this.rp = require('request-promise');
    }
 
    handleSessionEndRequest(callback) {
