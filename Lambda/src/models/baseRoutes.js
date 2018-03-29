@@ -20,6 +20,7 @@ module.exports = class baseRoutes {
    parseRoute(intent, userID, callback) {
       const intentName = intent.name;
       let response = this.changeView(intent, userID, intentName, callback)
+      console.log(1)
       if (intent.slots.suggestion && intent.slots.suggestion.value == 'yes') {
          this.checkSuggestion(intent, userID)
             .then(resp => {
@@ -27,7 +28,7 @@ module.exports = class baseRoutes {
                delete intent.slots.suggestion
                let route = this.buildQueryString(intent.slots)
                let sessionQuery = 'userID' + '=' + userID
-               this.sendBackReturnedData(intentName, resp.data[0], callback)
+               this.sendBackReturnedData(intentName, resp, callback)
             })
       }
       else if (intent.slots.view.value == 'map')
@@ -105,9 +106,11 @@ module.exports = class baseRoutes {
    }
 
    sendRequest(route, sessionQuery, intentName, callback) {
+      console.log(this.serverURL + route.toLowerCase() + sessionQuery)
       axios.get(this.serverURL + route.toLowerCase() + sessionQuery)
          .then(resp => this.sendBackReturnedData(intentName, resp, callback))
          .catch(err => {
+            console.log(err)
             this.handleErr(err, callback)
          });
    }
