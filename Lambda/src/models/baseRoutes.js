@@ -20,7 +20,6 @@ module.exports = class baseRoutes {
    parseRoute(intent, userID, callback) {
       const intentName = intent.name;
       let response = this.changeView(intent, userID, intentName, callback)
-      console.log(1)
       if (intent.slots.suggestion && intent.slots.suggestion.value == 'yes') {
          this.checkSuggestion(intent, userID)
             .then(resp => {
@@ -31,8 +30,6 @@ module.exports = class baseRoutes {
                this.sendBackReturnedData(intentName, resp, callback)
             })
       }
-      else if (intent.slots.view.value == 'map')
-         return
       else {
          delete intent.slots.view
          delete intent.slots.suggestion
