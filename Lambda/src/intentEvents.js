@@ -1,3 +1,6 @@
+/*
+Contains functions for events such as onLaunch and onSessionEnd.
+ */
 var startStop = require('./startStop');
 var routes = require('./routes');
 
@@ -7,14 +10,14 @@ module.exports = class events {
       this.routes = new routes();
    }
 
-   /**
+   /*
     * Called when the user launches the skill without specifying what they want.
     */
    onLaunch(callback, sessionID) {
       this.startStop.getWelcomeResponse(callback, sessionID);
    }
 
-   /**
+   /*
     * Called when the user ends the session.
     * Is not called when the skill returns shouldEndSession=true.
     */
@@ -23,7 +26,7 @@ module.exports = class events {
       // this.startStop.handleSessionEndRequest(callback)
    }
 
-   /**
+   /*
     * Called when the user specifies an intent for this skill.
     */
    onIntent(intentRequest, userID, callback) {

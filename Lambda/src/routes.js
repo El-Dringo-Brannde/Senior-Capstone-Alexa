@@ -1,3 +1,6 @@
+/*
+ Contains the functions for the specific user to go to the route, as well as a function to parse the route and change the view.
+ */
 var baseRoute = require('./models/baseRoutes');
 const axios = require('axios')
 

@@ -1,3 +1,6 @@
+/*
+Builds the response using the given parameters title, output, repromptText, shouldEndSession.
+ */
 module.exports = function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
    return {
       outputSpeech: {

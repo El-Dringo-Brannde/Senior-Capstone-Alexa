@@ -1,3 +1,6 @@
+/*
+The gulp file packages up the files for Alexa.
+ */
 var gulp = require('gulp')
 var clean = require('gulp-clean')
 var zip = require('gulp-zip')
