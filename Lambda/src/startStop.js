@@ -1,3 +1,6 @@
+/*
+Contains Alexas response upon starting up the application, and also closing the application.git
+ */
 var buildResponse = require('./buildResponse')
 
 module.exports = class startStop {

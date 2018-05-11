@@ -1,3 +1,6 @@
+/*
+ Base routes class contains functions that will build query strings, send back data or requests, and error handling..
+ */
 const axios = require('axios')
 
 module.exports = class baseRoutes {

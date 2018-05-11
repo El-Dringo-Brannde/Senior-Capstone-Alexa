@@ -1,3 +1,7 @@
+/*
+ baseHandler class
+  used to build a response, and also contains multiple request dealing with intent events.
+ */
 var intentEvents = require('./../intentEvents')
 
 module.exports = class baseHandler {

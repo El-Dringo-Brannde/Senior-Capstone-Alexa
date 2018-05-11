@@ -1,3 +1,6 @@
+/*
+Initialized parseIntent, which contains functions calls from the baseHandler.
+ */
 var baseHandler = require('./models/baseHandler');
 // --------------- Main handler -----------------------
 
